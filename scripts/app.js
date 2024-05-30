@@ -7501,13 +7501,16 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Example Chart with Subplots",
     },
 
-    xAxis: {
-      type: "datetime",
-      title: {
-        text: "Date",
+    xAxis: [
+      {
+        type: "datetime",
+        title: {
+          text: "Date",
+        },
+        offset: 0,
+        lineWidth: 1,
       },
-      events: {},
-    },
+    ],
 
     yAxis: [
       {
@@ -7515,7 +7518,6 @@ document.addEventListener("DOMContentLoaded", () => {
           text: "Implied Volatility",
         },
         opposite: false,
-        offset: 0,
         lineWidth: 1,
       },
       {
@@ -7523,6 +7525,11 @@ document.addEventListener("DOMContentLoaded", () => {
           text: "Realised Volatility",
         },
         opposite: true,
+        offset: 0,
+        lineWidth: 1,
+      },
+      {
+        title: false,
         offset: 0,
         lineWidth: 1,
       },
@@ -7539,6 +7546,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tooltip: {
           valueDecimals: 2,
         },
+        xAxis: 0,
         yAxis: 0,
         dataLabels: {
           enabled: true,
@@ -7561,6 +7569,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tooltip: {
           valueDecimals: 2,
         },
+        xAxis: 0,
         yAxis: 0,
         dataLabels: {
           enabled: true,
@@ -7572,6 +7581,23 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         },
         id: "hist_volatility_series",
+      },
+      {
+        name: "IV-HV Difference Histogram",
+        data: iv_hist_vol_diff.x.map((date, index) => [
+          new Date(date).getTime(),
+          iv_hist_vol_diff.y[index],
+        ]),
+        type: "column",
+        xAxis: 0,
+        yAxis: 0,
+        colorByPoint: true,
+        colors: iv_hist_vol_diff.x.map((date, index) => {
+          const relativeAge =
+            (iv_hist_vol_diff.x.length - index) / iv_hist_vol_diff.x.length;
+          return Highcharts.color(`rgba(0,0,255,${relativeAge})`).get();
+        }),
+        id: "histogram",
       },
     ],
 
@@ -7610,7 +7636,7 @@ document.addEventListener("DOMContentLoaded", () => {
               ).getTime(),
               y: last_value.hist_volatility,
               xAxis: 0,
-              yAxis: 0,
+              yAxis: 1,
             },
             text: `RV: ${last_value.hist_volatility}`,
           },
@@ -7620,8 +7646,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 iv_hist_vol_diff.x[iv_hist_vol_diff.x.length - 1]
               ).getTime(),
               y: last_value.iv_hist_vol_diff,
-              xAxis: 0,
-              yAxis: 1,
+              xAxis: 1,
+              yAxis: 2,
             },
             text: `Vol. Spread: ${last_value.iv_hist_vol_diff}`,
           },
@@ -7632,3 +7658,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Chart with subplots rendered");
 });
+
