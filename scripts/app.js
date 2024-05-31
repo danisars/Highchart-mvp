@@ -1,4 +1,4 @@
-import data from './data.js'
+import data from "./data.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed");
@@ -83,7 +83,26 @@ document.addEventListener("DOMContentLoaded", () => {
         lineWidth: 1,
       },
       {
-        title: false,
+        title: {
+          text: "",
+        },
+        plotLines: [
+          {
+            color: "red",
+            value: avgIvHistVolDiff,
+            width: 2,
+            zIndex: 4,
+            label: {
+              text: `Average IV-HV Difference: ${avgIvHistVolDiff.toFixed(2)}`,
+              align: 'right',
+              style: {
+                color: 'red',
+                fontWeight: 'bold'
+              }
+            }
+          },
+        ],
+        opposite: false,
         offset: 0,
         lineWidth: 1,
       },
@@ -124,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
           valueDecimals: 2,
         },
         xAxis: 0,
-        yAxis: 0,
+        yAxis: 1,
         dataLabels: {
           enabled: true,
           formatter() {
@@ -137,14 +156,14 @@ document.addEventListener("DOMContentLoaded", () => {
         id: "hist_volatility_series",
       },
       {
-        name: "IV-HV Difference Histogram",
+        name: "IV-HV Difference",
         data: iv_hist_vol_diff.x.map((date, index) => [
           new Date(date).getTime(),
           iv_hist_vol_diff.y[index],
         ]),
         type: "column",
         xAxis: 0,
-        yAxis: 0,
+        yAxis: 2,
         colorByPoint: true,
         colors: iv_hist_vol_diff.x.map((date, index) => {
           const relativeAge =
@@ -200,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 iv_hist_vol_diff.x[iv_hist_vol_diff.x.length - 1]
               ).getTime(),
               y: last_value.iv_hist_vol_diff,
-              xAxis: 1,
+              xAxis: 0,
               yAxis: 2,
             },
             text: `Vol. Spread: ${last_value.iv_hist_vol_diff}`,
@@ -209,7 +228,4 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     ],
   });
-
-  console.log("Chart with subplots rendered");
 });
-
