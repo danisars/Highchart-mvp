@@ -15,10 +15,32 @@ document.addEventListener("DOMContentLoaded", () => {
     iv_hist_vol_diff.y.reduce((sum, value) => sum + value, 0) /
     iv_hist_vol_diff.y.length;
 
+  function filterDataByDateRange(startDate, endDate) {
+    const filteredData = {
+      iv: { x: [], y: [] },
+      hist_volatility: { x: [], y: [] },
+      iv_hist_vol_diff: { x: [], y: [] },
+    };
+
+    iv.x.forEach((date, index) => {
+      const dateTime = new Date(date).getTime();
+      if (dateTime >= startDate && dateTime <= endDate) {
+        filteredData.iv.x.push(dateTime);
+        filteredData.iv.y.push(iv.y[index]);
+        filteredData.hist_volatility.x.push(dateTime);
+        filteredData.hist_volatility.y.push(hist_volatility.y[index]);
+        filteredData.iv_hist_vol_diff.x.push(dateTime);
+        filteredData.iv_hist_vol_diff.y.push(iv_hist_vol_diff.y[index]);
+      }
+    });
+
+    return filteredData;
+  }
+
   Highcharts.stockChart("container", {
     rangeSelector: {
-      selected: 0,
-      inputEnabled: false,
+      selected: 5,
+      inputEnabled: true,
       buttons: [
         {
           type: "month",
@@ -55,16 +77,62 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Example Chart with Subplots",
     },
 
-    xAxis: [
-      {
-        type: "datetime",
-        title: {
-          text: "Date",
-        },
-        offset: 0,
-        lineWidth: 1,
+    xAxis: {
+      type: "category",
+      categories: iv.x.map(
+        (date) => new Date(date).toISOString().split("T")[0]
+      ),
+      title: {
+        text: "Date",
       },
-    ],
+      crosshair: true,
+      labels: {
+        formatter: function () {
+          return Highcharts.dateFormat(
+            "%Y-%m-%d",
+            new Date(this.value).getTime()
+          );
+        },
+      },
+      events: {
+        afterSetExtremes: (event) => {
+          console.log(event);
+          const min = event.min;
+          const max = event.max;
+          const filteredData = filterDataByDateRange(min, max);
+          console.log({ filteredData });
+          Highcharts.chart('container2', {
+            title: {
+                text: 'IV Hist Vol Diff Histogram'
+            },
+            xAxis: [{
+                title: { text: 'IV Hist Vol Diff' }
+            }],
+            yAxis: [{
+                title: { text: 'Frequency' }
+            }],
+            series: [{
+                name: 'Histogram',
+                type: 'histogram',
+                baseSeries: 's1',
+                zIndex: -1
+            }, {
+                name: 'IV Hist Vol Diff',
+                type: 'scatter',
+                data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
+                    x: new Date(filteredData.iv_hist_vol_diff.x[index]).getTime(),
+                    y: value,
+                    color: `rgba(22, 222, 255, ${(index / filteredData.iv_hist_vol_diff.y.length)})`
+                })),
+                id: 's1',
+                marker: {
+                    radius: 1.5
+                }
+            }]
+        });
+        },
+      },
+    },
 
     yAxis: [
       {
@@ -73,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         opposite: false,
         lineWidth: 1,
+        offset: 0,
       },
       {
         title: {
@@ -84,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: {
-          text: "",
+          text: "IV-HV Difference",
         },
         plotLines: [
           {
@@ -94,16 +163,16 @@ document.addEventListener("DOMContentLoaded", () => {
             zIndex: 4,
             label: {
               text: `Average IV-HV Difference: ${avgIvHistVolDiff.toFixed(2)}`,
-              align: 'right',
+              align: "right",
               style: {
-                color: 'red',
-                fontWeight: 'bold'
-              }
-            }
+                color: "red",
+                fontWeight: "bold",
+              },
+            },
           },
         ],
-        opposite: false,
-        offset: 0,
+        opposite: true,
+        offset: 60,
         lineWidth: 1,
       },
     ],
@@ -164,12 +233,6 @@ document.addEventListener("DOMContentLoaded", () => {
         type: "column",
         xAxis: 0,
         yAxis: 2,
-        colorByPoint: true,
-        colors: iv_hist_vol_diff.x.map((date, index) => {
-          const relativeAge =
-            (iv_hist_vol_diff.x.length - index) / iv_hist_vol_diff.x.length;
-          return Highcharts.color(`rgba(0,0,255,${relativeAge})`).get();
-        }),
         id: "histogram",
       },
     ],
@@ -182,10 +245,10 @@ document.addEventListener("DOMContentLoaded", () => {
           tooltip += `${point.series.name}: ${point.y}<br/>`;
         });
         tooltip += `<b>Last Values:</b><br/>
-                      IV: ${last_value.iv}<br/>
-                      RV: ${last_value.hist_volatility}<br/>
-                      Vol. Spread: ${last_value.iv_hist_vol_diff}<br/>
-                      Vol. Spread Percentile: ${last_value.iv_hist_vol_diff_percentile}`;
+                          IV: ${last_value.iv}<br/>
+                          RV: ${last_value.hist_volatility}<br/>
+                          Vol. Spread: ${last_value.iv_hist_vol_diff}<br/>
+                          Vol. Spread Percentile: ${last_value.iv_hist_vol_diff_percentile}`;
         return tooltip;
       },
     },
@@ -201,28 +264,6 @@ document.addEventListener("DOMContentLoaded", () => {
               yAxis: 0,
             },
             text: `IV: ${last_value.iv}`,
-          },
-          {
-            point: {
-              x: new Date(
-                hist_volatility.x[hist_volatility.x.length - 1]
-              ).getTime(),
-              y: last_value.hist_volatility,
-              xAxis: 0,
-              yAxis: 1,
-            },
-            text: `RV: ${last_value.hist_volatility}`,
-          },
-          {
-            point: {
-              x: new Date(
-                iv_hist_vol_diff.x[iv_hist_vol_diff.x.length - 1]
-              ).getTime(),
-              y: last_value.iv_hist_vol_diff,
-              xAxis: 0,
-              yAxis: 2,
-            },
-            text: `Vol. Spread: ${last_value.iv_hist_vol_diff}`,
           },
         ],
       },
