@@ -20,23 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log({ min }, { max });
     return { min, max };
   }
-
-  function createBarChartSeries(bar_chart) {
-    return bar_chart.flatMap((chart) => {
-      return chart.price.map((priceRange, index) => {
-        const { min, max } = parsePriceRange(priceRange);
-        return {
-          type: "columnrange",
-          name: `Bar Chart ${index + 1}`,
-          data: [[new Date(chart.start_date).getTime(), min, max]],
-          tooltip: {
-            pointFormat: "Value: <b>{point.y}</b>",
-          },
-        };
-      });
-    });
-  }
-
+  
   function initializeCombinedChart() {
     const combinedChartOptions = {
       chart: {
@@ -59,18 +43,26 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         },
       },
-      yAxis: {
-        title: {
-          text: "Value",
-        },
-        plotLines: [
-          {
-            value: 0,
-            width: 1,
-            color: "#808080",
+      yAxis: [
+        {
+          title: {
+            text: "Value",
           },
-        ],
-      },
+          plotLines: [
+            {
+              value: 0,
+              width: 1,
+              color: "#808080",
+            },
+          ],
+        },
+        {
+          title: {
+            text: "Bar Chart Values",
+          },
+          opposite: true,
+        },
+      ],
       tooltip: {
         shared: true,
       },
@@ -82,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             close.y[index],
           ]),
           tooltip: {
-            valueDecimals: 2,
+            valueDecimals: 1,
           },
         },
         {
@@ -104,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ];
           }),
           tooltip: {
-            valueDecimals: 2,
+            valueDecimals: 1,
           },
           color: "red",
           upColor: "green",
@@ -118,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ],
           },
         },
-        // ...createBarChartSeries(bar_chart),
       ],
     };
 
