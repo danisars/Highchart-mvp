@@ -1,0 +1,138 @@
+@import 'https://code.highcharts.com/css/highcharts.css';
+
+:root,
+.highcharts-light {
+    /* Colors for data series and points */
+    --highcharts-color-0: #0089DD;
+    --highcharts-color-1: #00E9C9;
+    --highcharts-color-2: #3D6BB0;
+    --highcharts-color-3: #00A37C;
+    --highcharts-color-4: #1F7AC6;
+    --highcharts-color-5: #00C6A2;
+    --highcharts-color-6: #00CACA;
+    --highcharts-color-7: #00AAD3;
+    --highcharts-color-8: #008060;
+    --highcharts-color-9: #5C5C99;
+
+    /* Chart background, point stroke for markers and columns etc */
+    --highcharts-background-color: #ffffff;
+
+    /*
+    Neutral colors, grayscale by default. The default colors are defined by
+    mixing the background-color with neutral, with a weight corresponding to
+    the number in the name.
+
+    https://www.highcharts.com/samples/highcharts/css/palette-helper
+    */
+
+    /* Strong text. */
+    --highcharts-neutral-color-100: #0F172A;
+
+    /* Main text, axis labels and some strokes. */
+    --highcharts-neutral-color-80: #334155;
+
+    /* Axis title, connector fallback. */
+    --highcharts-neutral-color-60: #64748B;
+
+    /* Credits text, export menu stroke. */
+    --highcharts-neutral-color-40: #94A3B8;
+
+    /* Disabled texts, button strokes, crosshair etc. */
+    --highcharts-neutral-color-20: #CBD5E1;
+
+    /* Grid lines etc. */
+    --highcharts-neutral-color-10: #E2E8F0;
+
+    /* Minor grid lines etc. */
+    --highcharts-neutral-color-5: #F1F5F9;
+
+    /* Tooltip backgroud, button fills, map null points. */
+    --highcharts-neutral-color-3: #F8FAFC;
+
+    /*
+    Highlights, shades of blue by default
+    */
+
+    /* Drilldown clickable labels, color axis max color. */
+    --highcharts-highlight-color-100: #0089DD;
+
+    /* Selection marker, menu hover, button hover, chart border, navigator
+    series. */
+    --highcharts-highlight-color-80: #33A1E4;
+
+    /* Navigator mask fill. */
+    --highcharts-highlight-color-60: #66B8EB;
+
+    /* Ticks and axis line. */
+    --highcharts-highlight-color-20: #99D0F1;
+
+    /* Pressed button, color axis min color. */
+    --highcharts-highlight-color-10: #CCE7F8;
+
+    /* Indicators */
+    --highcharts-positive-color: #48b38f;
+    --highcharts-negative-color: #e54e4e;
+
+    /* Transparent colors for annotations */
+    --highcharts-annotation-color-0: rgba(0,137,221,0.4);
+    --highcharts-annotation-color-1: rgba(0,172,214,0.4); 
+    --highcharts-annotation-color-2: rgba(0,202,202,0.4);
+    --highcharts-annotation-color-3: rgba(0,233,201,0.4); 
+    --highcharts-annotation-color-4: rgba(72,179,143,0.4);
+    --highcharts-annotation-color-5: rgba(0,128,96,0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* UI colors */
+        --highcharts-background-color: rgb(51, 65, 85);
+
+        /*
+            Neutral color variations
+            https://www.highcharts.com/samples/highcharts/css/palette-helper
+        */
+/* Neutral color variations */
+    --highcharts-neutral-color-100: rgb(248, 250, 252);
+    --highcharts-neutral-color-80: rgb(199, 201, 206);
+    --highcharts-neutral-color-60: rgb(150, 152, 160);
+    --highcharts-neutral-color-40: rgb(100, 104, 115);
+    --highcharts-neutral-color-20: rgb(51, 55, 69);
+    --highcharts-neutral-color-10: rgb(27, 30, 46);
+    --highcharts-neutral-color-5: rgb(14, 18, 34);
+    --highcharts-neutral-color-3: rgb(9, 13, 30);
+
+    /* Highlight color variations */
+    --highcharts-highlight-color-100: rgb(0, 137, 221);
+    --highcharts-highlight-color-80: rgb(0, 111, 181);
+    --highcharts-highlight-color-60: rgb(1, 85, 142);
+    --highcharts-highlight-color-20: rgb(2, 32, 63);
+    --highcharts-highlight-color-10: rgb(2, 19, 43);
+    }
+}
+
+.highcharts-dark {
+    /* UI colors */
+    --highcharts-background-color: rgb(48, 48, 48);
+
+/* Neutral color variations */
+    --highcharts-neutral-color-100: rgb(248, 250, 252);
+    --highcharts-neutral-color-80: rgb(199, 201, 206);
+    --highcharts-neutral-color-60: rgb(150, 152, 160);
+    --highcharts-neutral-color-40: rgb(100, 104, 115);
+    --highcharts-neutral-color-20: rgb(51, 55, 69);
+    --highcharts-neutral-color-10: rgb(27, 30, 46);
+    --highcharts-neutral-color-5: rgb(14, 18, 34);
+    --highcharts-neutral-color-3: rgb(9, 13, 30);
+
+    /* Highlight color variations */
+    --highcharts-highlight-color-100: rgb(0, 137, 221);
+    --highcharts-highlight-color-80: rgb(0, 111, 181);
+    --highcharts-highlight-color-60: rgb(1, 85, 142);
+    --highcharts-highlight-color-20: rgb(2, 32, 63);
+    --highcharts-highlight-color-10: rgb(2, 19, 43);
+}
+.highcharts-container {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-family: JetBrains Mono, monospace;
+    font-size: 1rem;
+}
