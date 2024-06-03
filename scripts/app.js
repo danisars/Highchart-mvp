@@ -199,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           },
         },
+        zIndex:2,
         id: "iv_series",
       },
       {
@@ -222,6 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           },
         },
+        zIndex:2,
         id: "hist_volatility_series",
       },
       {
@@ -233,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
         type: "column",
         xAxis: 0,
         yAxis: 2,
+        zIndex:-1,
         id: "histogram",
       },
     ],
