@@ -5,12 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const { iv, hist_volatility, iv_hist_vol_diff, last_value } = data;
 
-  if (typeof Highcharts === "undefined") {
-    console.error("Highcharts is not loaded");
-  } else {
-    console.log("Highcharts is loaded");
-  }
-
   const avgIvHistVolDiff =
     iv_hist_vol_diff.y.reduce((sum, value) => sum + value, 0) /
     iv_hist_vol_diff.y.length;
@@ -37,9 +31,44 @@ document.addEventListener("DOMContentLoaded", () => {
     return filteredData;
   }
 
-  Highcharts.stockChart("container", {
+  function createHistogramChart(filteredData) {
+    Highcharts.chart("container2", {
+      title: {
+        text: "IV Hist Vol Diff Histogram",
+      },
+      xAxis: [
+        {
+          title: { text: "IV Hist Vol Diff" },
+        },
+      ],
+      yAxis: [
+        {
+          title: { text: "Frequency" },
+        },
+      ],
+      series: [
+        {
+          name: "Histogram",
+          type: "histogram",
+          data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
+            y: value,
+            color: `rgba(22, 222, 255, ${
+              index / filteredData.iv_hist_vol_diff.y.length
+            })`,
+          })),
+          tooltip: {
+            valueDecimals: 2,
+          },
+          baseSeries: "s1",
+          zIndex: -1,
+        },
+      ],
+    });
+  }
+
+  const chart = Highcharts.stockChart("container", {
     rangeSelector: {
-      selected: 5,
+      selected: 0,
       inputEnabled: true,
       buttons: [
         {
@@ -96,40 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       events: {
         afterSetExtremes: (event) => {
-          console.log(event);
           const min = event.min;
           const max = event.max;
           const filteredData = filterDataByDateRange(min, max);
-          console.log({ filteredData });
-          Highcharts.chart('container2', {
-            title: {
-                text: 'IV Hist Vol Diff Histogram'
-            },
-            xAxis: [{
-                title: { text: 'IV Hist Vol Diff' }
-            }],
-            yAxis: [{
-                title: { text: 'Frequency' }
-            }],
-            series: [{
-                name: 'Histogram',
-                type: 'histogram',
-                baseSeries: 's1',
-                zIndex: -1
-            }, {
-                name: 'IV Hist Vol Diff',
-                type: 'scatter',
-                data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
-                    x: new Date(filteredData.iv_hist_vol_diff.x[index]).getTime(),
-                    y: value,
-                    color: `rgba(22, 222, 255, ${(index / filteredData.iv_hist_vol_diff.y.length)})`
-                })),
-                id: 's1',
-                marker: {
-                    radius: 1.5
-                }
-            }]
-        });
+          createHistogramChart(filteredData);
         },
       },
     },
@@ -199,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           },
         },
-        zIndex:2,
+        zIndex: 2,
         id: "iv_series",
       },
       {
@@ -223,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           },
         },
-        zIndex:2,
+        zIndex: 2,
         id: "hist_volatility_series",
       },
       {
@@ -235,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
         type: "column",
         xAxis: 0,
         yAxis: 2,
-        zIndex:-1,
+        zIndex: -1,
         id: "histogram",
       },
     ],
@@ -272,4 +271,9 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     ],
   });
+
+  const initialMin = chart.xAxis[0].getExtremes().min;
+  const initialMax = chart.xAxis[0].getExtremes().max;
+  const initialFilteredData = filterDataByDateRange(initialMin, initialMax);
+  createHistogramChart(initialFilteredData);
 });
