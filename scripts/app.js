@@ -50,17 +50,22 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           name: "Histogram",
           type: "histogram",
-          data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
-            y: value,
-            color: `rgba(22, 222, 255, ${
-              index / filteredData.iv_hist_vol_diff.y.length
-            })`,
-          })),
-          tooltip: {
-            valueDecimals: 2,
-          },
           baseSeries: "s1",
           zIndex: -1,
+        },
+        {
+          name: "IV Hist Vol Diff",
+          type: "scatter",
+          data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
+            x: new Date(filteredData.iv_hist_vol_diff.x[index]).getTime(),
+            y: value,
+          })),
+          id: "s1",
+          marker: {
+            radius: 0,
+          },
+          visible: false,
+          showInLegend:false
         },
       ],
     });
