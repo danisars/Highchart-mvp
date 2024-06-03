@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
           tooltip: {
             valueDecimals: 1,
           },
+          id: "close_series",
         },
         {
           type: "candlestick",
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
               ["month", [1, 3, 6]],
             ],
           },
+          id: "candle_series",
         },
       ],
     };
