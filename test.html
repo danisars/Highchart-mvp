@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Highcharts Candlestick Chart with VBP and Pivot Points</title>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/pivot-points.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+    <script type="modules" src="./scripts/data2.js"></script>
+  </head>
+  <body>
+    <div id="container" style="height: 600px; min-width: 310px"></div>
+    <script type="module">
+      import data2 from "./scripts/data2.js";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const { close, bar_chart } = data2;
+
+        function findMinMaxPrice(priceRanges) {
+          // Initialize min and max with the first price range
+          let min = Number(priceRanges[0].split("-")[0]);
+          let max = Number(priceRanges[0].split("-")[1]);
+
+          // Loop through the rest of the price ranges to find min and max
+          for (let i = 1; i < priceRanges.length; i++) {
+            let range = priceRanges[i].split("-");
+            let rangeMin = Number(range[0]);
+            let rangeMax = Number(range[1]);
+
+            // Update min if rangeMin is smaller
+            if (rangeMin < min) {
+              min = rangeMin;
+            }
+
+            // Update max if rangeMax is larger
+            if (rangeMax > max) {
+              max = rangeMax;
+            }
+          }
+
+          return { min, max };
+        }
+
+        function createCandlestickSeris(series) {
+          return close.x.map((date, index) => {
+            const closeValue = close.y[index];
+            const openValue = closeValue + (Math.random() * 50 - 25);
+            const highValue =
+              Math.max(openValue, closeValue) + Math.random() * 25;
+            const lowValue =
+              Math.min(openValue, closeValue) - Math.random() * 25;
+            return [
+              new Date(date).getTime(),
+              openValue,
+              highValue,
+              lowValue,
+              closeValue,
+            ];
+          });
+        }
+
+        function createCloseLineSeris(series) {
+          return series.x.map((date, index) => [
+            new Date(date).getTime(),
+            series.y[index],
+          ]);
+        }
+
+        function createVolumeSeries(series) {
+          const volumeData = [];
+          series.forEach((data) => {
+            const priceRanges = data.price;
+            const volumes = data.value;
+            priceRanges.forEach((range, index) => {
+              const rangeValues = range.split("-");
+              const volume = volumes[index];
+              const volumePoint = {
+                x: new Date(data.start).getTime(),
+                low: parseFloat(rangeValues[0]),
+                high: parseFloat(rangeValues[1]),
+                y: volume,
+              };
+              volumeData.push(volumePoint);
+            });
+          });
+          return volumeData;
+        }
+
+        Highcharts.stockChart("container", {
+          rangeSelector: {
+            selected: 1,
+          },
+          title: {
+            text: "Candlestick Chart with Pivot Points and Volume by Price",
+          },
+          yAxis: [
+            {
+              title: {
+                text: "Price",
+              },
+              height: "60%",
+              lineWidth: 2,
+              resize: {
+                enabled: true,
+              },
+            },
+            {
+              title: {
+                text: "Volume",
+              },
+              top: "65%",
+              height: "35%",
+              offset: 0,
+              lineWidth: 2,
+            },
+          ],
+          tooltip: {
+            split: true,
+          },
+          series: [
+            {
+              name: "Close",
+              data: createCloseLineSeris(close),
+              tooltip: {
+                valueDecimals: 1,
+              },
+              id: "close_series",
+            },
+            {
+              type: "candlestick",
+              name: "Candlestick",
+              data: createCandlestickSeris(close),
+              tooltip: {
+                valueDecimals: 1,
+              },
+              color: "red",
+              upColor: "green",
+              lineColor: "red",
+              upLineColor: "green",
+              dataGrouping: {
+                units: [
+                  ["day", [1]],
+                  ["week", [1]],
+                  ["month", [1, 3, 6]],
+                ],
+              },
+              id: "candlestick",
+            },
+            {
+              type: "column",
+              name: "Volume",
+              data: createVolumeSeries(bar_chart),
+              yAxis: 1,
+              id: "volume",
+              tooltip: {
+                valueDecimals: 1,
+              },
+            },
+            {
+              type: "vbp",
+              linkedTo: "candlestick",
+              params: {
+                volumeSeriesID: "volume", // need to fix it
+                ranges: 12,
+              },
+              dataLabels: {
+                enabled: true,
+                format: "{point.vbpValue:.2f}",
+              },
+              zoneLines: {
+                enabled: false,
+              },
+            },
+            {
+              type: "pivotpoints",
+              linkedTo: "candlestick",
+              params: {
+                algorithm: "standard",
+              },
+              marker: {
+                enabled: false,
+              },
+              dataLabels: {
+                overflow: "none",
+                crop: false,
+                y: 4,
+                style: {
+                  fontSize: "9px",
+                },
+              },
+            },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>

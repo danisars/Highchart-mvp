@@ -20,7 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log({ min }, { max });
     return { min, max };
   }
-  
+
+  function prepareBarChartData(bar_chart) {
+    return bar_chart.flatMap((chart) => {
+      const startDate = new Date(chart.start).getTime();
+      return chart.price.map((priceRange, index) => {
+        const { min, max } = parsePriceRange(priceRange);
+        return {
+          x: startDate,
+          y: (min + max) / 2,
+          value: chart.value[index],
+          priceRange: priceRange,
+        };
+      });
+    });
+  }
+
   function initializeCombinedChart() {
     const combinedChartOptions = {
       chart: {
@@ -101,8 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           color: "red",
           upColor: "green",
-          lineColor: 'red',
-          upLineColor: 'green',
+          lineColor: "red",
+          upLineColor: "green",
           dataGrouping: {
             units: [
               ["day", [1]],
@@ -111,6 +126,22 @@ document.addEventListener("DOMContentLoaded", () => {
             ],
           },
           id: "candle_series",
+        },
+        {
+          name: "Bar Chart",
+          type: "column",
+          data: prepareBarChartData(bar_chart).map((item) => [
+            item.x,
+            item.y,
+            item.value,
+          ]),
+          yAxis: 1,
+          tooltip: {
+            pointFormatter: function () {
+              return `Price Range: ${this.priceRange}<br/>Value: ${this.value}`;
+            },
+          },
+          colorByPoint: true,
         },
       ],
     };

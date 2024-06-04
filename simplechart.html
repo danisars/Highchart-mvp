@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/pivot-points.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/ema.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/macd.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <link rel="stylesheet" href="./assets/main.css" />
+  </head>
+  <body>
+    test
+    <div id="container" style="height: 600px; min-width: 310px"></div>
+    <script type="module">
+      import data from "./scripts/data3.js";
+      import data2 from "./scripts/data2.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("herkj", { data });
+        const { close, bar_chart } = data2;
+
+        Highcharts.stockChart("container", {
+          rangeSelector: {
+            selected: 2,
+          },
+
+          title: {
+            text: "Test chart",
+          },
+
+          subtitle: {
+            text: "With SMA and Volume by Price technical indicators",
+          },
+
+          yAxis: [
+            {
+              startOnTick: false,
+              endOnTick: false,
+              labels: {
+                align: "right",
+                x: -3,
+              },
+              title: {
+                text: "OHLC",
+              },
+              lineWidth: 2,
+              resize: {
+                enabled: true,
+              },
+            },
+            {
+              labels: {
+                align: "right",
+                x: -3,
+              },
+              title: {
+                text: "Volume",
+              },
+              top: "65%",
+              height: "35%",
+              offset: 0,
+              lineWidth: 2,
+              visible: false,
+            },
+          ],
+
+          tooltip: {
+            split: true,
+          },
+
+          plotOptions: {
+            series: {
+              dataGrouping: {
+                units: [
+                  [
+                    "week", // unit name
+                    [1], // allowed multiples
+                  ],
+                  ["month", [1, 2, 3, 4, 6]],
+                ],
+              },
+            },
+          },
+
+          series: [
+            {
+              type: "candlestick",
+              name: "candlestick",
+              id: "candlestick",
+              zIndex: 2,
+              data: close.x.map((date, index) => {
+                const closeValue = close.y[index];
+                const openValue = closeValue + (Math.random() * 50 - 25);
+                const highValue =
+                  Math.max(openValue, closeValue) + Math.random() * 25;
+                const lowValue =
+                  Math.min(openValue, closeValue) - Math.random() * 25;
+                return [
+                  new Date(date).getTime(),
+                  openValue,
+                  highValue,
+                  lowValue,
+                  closeValue,
+                ];
+              }),
+            },
+            {
+              type: "column",
+              name: "Volume",
+              id: "volume",
+              data: bar_chart.map((date, index) => {
+                return {
+                  x: new Date(date).getTime(),
+                  y: 1233212,
+                };
+              }),
+              yAxis: 1,
+              visible: false,
+            },
+            {
+              type: "vbp",
+              linkedTo: "candlestick",
+              params: {
+                volumeSeriesID: "volume",
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              zoneLines: {
+                enabled: false,
+              },
+            },
+            {
+              type: "sma",
+              linkedTo: "candlestick",
+              zIndex: 1,
+              marker: {
+                enabled: false,
+              },
+            },
+            {
+              type: "pivotpoints",
+              linkedTo: "candlestick",
+              zIndex: 0,
+              lineWidth: 1,
+              dataLabels: {
+                overflow: "none",
+                crop: false,
+                y: 4,
+                style: {
+                  fontSize: 9,
+                },
+              },
+            },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>
