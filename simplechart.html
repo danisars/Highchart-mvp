@@ -21,14 +21,11 @@
     <link rel="stylesheet" href="./assets/main.css" />
   </head>
   <body>
-    test
     <div id="container" style="height: 600px; min-width: 310px"></div>
     <script type="module">
-      import data from "./scripts/data3.js";
       import data2 from "./scripts/data2.js";
 
       document.addEventListener("DOMContentLoaded", () => {
-        console.log("herkj", { data });
         const { close, bar_chart } = data2;
 
         Highcharts.stockChart("container", {
@@ -53,7 +50,7 @@
                 x: -3,
               },
               title: {
-                text: "OHLC",
+                text: "test",
               },
               lineWidth: 2,
               resize: {
