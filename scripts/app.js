@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return filteredData;
   }
 
-  function createHistogramChart(filteredData,extraData) {
+  function createHistogramChart(filteredData,hoverPlotData) {
     Highcharts.chart("container2", {
       title: {
         text: "IV Hist Vol Diff Histogram",
@@ -74,11 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             {
               color:'brown',
-              value:extraData,
+              value:hoverPlotData,
               width:2,
               zIndex:5,
               label: {
-                text: `Realised Volatility: ${extraData?.toFixed(2)}`,
+                text: `Realised Volatility: ${hoverPlotData?.toFixed(2)}`,
                 align: "left",
                 style: {
                   color: "brown",
