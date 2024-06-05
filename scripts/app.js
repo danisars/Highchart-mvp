@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
       title: {
         text: "IV Hist Vol Diff Histogram",
       },
+      boost: {
+        useGPUTranslations: true,
+        usePreAllocated: true,
+      },
       xAxis: [
         {
           title: { text: "IV Hist Vol Diff" },
@@ -82,17 +86,23 @@ document.addEventListener("DOMContentLoaded", () => {
           type: "histogram",
           baseSeries: "s1",
           zIndex: -1,
+          dataGrouping: {
+            enabled: true,
+          },
+          turboThreshold: 0,
         },
         {
           name: "IV Hist Vol Diff",
           type: "scatter",
-          data: filteredData.iv_hist_vol_diff.y.map((value, index) => ({
-            x: new Date(filteredData.iv_hist_vol_diff.x[index]).getTime(),
-            y: value,
-          })),
+          data: filteredData.iv_hist_vol_diff.x.map((x, index) => [
+            x,
+            filteredData.iv_hist_vol_diff.y[index],
+          ]),
           id: "s1",
+          boostThreshold: 1000,
+          turboThreshold: 0,
           marker: {
-            radius: 0,
+            radius: 1,
           },
           visible: false,
           showInLegend: false,
@@ -151,13 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
     },
 
     xAxis: {
-      type: "category",
-      categories: iv.x.map(
-        (date) => new Date(date).toISOString().split("T")[0]
-      ),
-      title: {
-        text: "Date",
-      },
+      type: "datetime",
+      tickInterval: 24 * 3600 * 1000,
       crosshair: true,
       labels: {
         formatter: function () {
@@ -235,6 +240,11 @@ document.addEventListener("DOMContentLoaded", () => {
         yAxis: 0,
         zIndex: 2,
         id: "iv_series",
+        boostThreshold: 1000,
+        dataGrouping: {
+          enabled: true,
+        },
+        turboThreshold: 0,
       },
       {
         name: "Realised Volatility",
@@ -250,6 +260,11 @@ document.addEventListener("DOMContentLoaded", () => {
         yAxis: 1,
         zIndex: 2,
         id: "hist_volatility_series",
+        boostThreshold: 1000,
+        dataGrouping: {
+          enabled: true,
+        },
+        turboThreshold: 0,
       },
       {
         name: "IV-HV Difference",
@@ -262,6 +277,11 @@ document.addEventListener("DOMContentLoaded", () => {
         yAxis: 2,
         zIndex: -1,
         id: "histogram",
+        boostThreshold: 1000,
+        dataGrouping: {
+          enabled: true,
+        },
+        turboThreshold: 0,
       },
     ],
 
