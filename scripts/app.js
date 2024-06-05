@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return filteredData;
   }
 
-  function createHistogramChart(filteredData) {
+  function createHistogramChart(filteredData,extraData) {
     Highcharts.chart("container2", {
       title: {
         text: "IV Hist Vol Diff Histogram",
@@ -72,6 +72,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
               },
             },
+            {
+              color:'brown',
+              value:extraData,
+              width:2,
+              zIndex:5,
+              label: {
+                text: `Realised Volatility: ${extraData?.toFixed(2)}`,
+                align: "left",
+                style: {
+                  color: "brown",
+                  fontWeight: "bold",
+                },
+              },
+            }
           ],
         },
       ],
@@ -265,6 +279,17 @@ document.addEventListener("DOMContentLoaded", () => {
           enabled: true,
         },
         turboThreshold: 0,
+        point: {
+          events: {
+            mouseOver: function (event) {
+              console.log(chart.xAxis[0].min, chart.xAxis[0].max);
+              const filteredData = filterDataByDateRange(chart.xAxis[0].min, chart.xAxis[0].max)
+              console.log({filteredData});
+              console.log(event.target.y);
+              createHistogramChart(filteredData,event.target.y)
+            },
+          },
+        },
       },
       {
         name: "IV-HV Difference",
