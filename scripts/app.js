@@ -39,6 +39,36 @@ document.addEventListener("DOMContentLoaded", () => {
       xAxis: [
         {
           title: { text: "IV Hist Vol Diff" },
+          plotLines: [
+            {
+              color: "blue",
+              value: last_value.iv_hist_vol_diff,
+              width: 2,
+              zIndex: 5,
+              label: {
+                text: `Last: ${last_value.iv_hist_vol_diff.toFixed(2)}`,
+                align: "left",
+                style: {
+                  color: "blue",
+                  fontWeight: "bold",
+                },
+              },
+            },
+            {
+              color: "red",
+              value: avgIvHistVolDiff,
+              width: 2,
+              zIndex: 5,
+              label: {
+                text: `Mean: ${avgIvHistVolDiff.toFixed(2)}`,
+                align: "left",
+                style: {
+                  color: "red",
+                  fontWeight: "bold",
+                },
+              },
+            },
+          ],
         },
       ],
       yAxis: [
@@ -65,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
             radius: 0,
           },
           visible: false,
-          showInLegend:false
+          showInLegend: false,
         },
       ],
     });
@@ -103,6 +133,15 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           type: "all",
           text: "All",
+          events: {
+            click: function () {
+              const filteredData = filterDataByDateRange(
+                new Date(iv.x[0]).getTime(),
+                new Date(iv.x[iv.x.length - 1]).getTime()
+              );
+              createHistogramChart(filteredData);
+            },
+          },
         },
       ],
     },
@@ -194,15 +233,6 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         xAxis: 0,
         yAxis: 0,
-        dataLabels: {
-          enabled: true,
-          formatter() {
-            let points = this.series.points;
-            if (this.x === points[points.length - 1].x) {
-              return last_value.iv;
-            }
-          },
-        },
         zIndex: 2,
         id: "iv_series",
       },
@@ -218,15 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         xAxis: 0,
         yAxis: 1,
-        dataLabels: {
-          enabled: true,
-          formatter() {
-            let points = this.series.points;
-            if (this.x === points[points.length - 1].x) {
-              return last_value.hist_volatility;
-            }
-          },
-        },
         zIndex: 2,
         id: "hist_volatility_series",
       },
@@ -259,22 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return tooltip;
       },
     },
-
-    annotations: [
-      {
-        labels: [
-          {
-            point: {
-              x: new Date(iv.x[iv.x.length - 1]).getTime(),
-              y: last_value.iv,
-              xAxis: 0,
-              yAxis: 0,
-            },
-            text: `IV: ${last_value.iv}`,
-          },
-        ],
-      },
-    ],
   });
 
   const initialMin = chart.xAxis[0].getExtremes().min;
