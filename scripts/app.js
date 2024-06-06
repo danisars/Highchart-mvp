@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
               width:2,
               zIndex:5,
               label: {
-                text: `Realised Volatility: ${hoverPlotData?.toFixed(2)}`,
+                text: `iv_hist_vol_diff: ${hoverPlotData?.toFixed(2)}`,
                 align: "left",
                 style: {
                   color: "brown",
@@ -279,17 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
           enabled: true,
         },
         turboThreshold: 0,
-        point: {
-          events: {
-            mouseOver: function (event) {
-              console.log(chart.xAxis[0].min, chart.xAxis[0].max);
-              const filteredData = filterDataByDateRange(chart.xAxis[0].min, chart.xAxis[0].max)
-              console.log({filteredData});
-              console.log(event.target.y);
-              createHistogramChart(filteredData,event.target.y)
-            },
-          },
-        },
       },
       {
         name: "IV-HV Difference",
@@ -307,6 +296,15 @@ document.addEventListener("DOMContentLoaded", () => {
           enabled: true,
         },
         turboThreshold: 0,
+        point: {
+          events: {
+            mouseOver: function (event) {
+              const filteredData = filterDataByDateRange(chart.xAxis[0].min, chart.xAxis[0].max)
+              console.log(event.target.y);
+              createHistogramChart(filteredData,event.target.y)
+            },
+          },
+        },
       },
     ],
 

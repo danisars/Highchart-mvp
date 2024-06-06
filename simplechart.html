@@ -58,6 +58,17 @@
             text: "With SMA and Volume by Price technical indicators",
           },
 
+          xAxis: [
+            {
+              opposite:false
+            },
+            {
+              // secondary X axis (top)
+              opposite: true,
+              linkedTo: 0,
+            },
+          ],
+
           yAxis: [
             {
               startOnTick: false,
