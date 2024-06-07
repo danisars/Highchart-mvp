@@ -1,0 +1,38 @@
+*,body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* styles.css */
+
+.main-container{
+    display: flex;
+}
+
+/* General container class */
+/* .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+} */
+
+/* Specific container for charts */
+.chart-container {
+    width: 100%;
+    height: 800px;
+    margin-top: 20px;
+    /* border: 1px solid #ccc;
+    border-radius: 4px; */
+    /* padding: 10px; */
+    /* background-color: #f9f9f9; */
+}
+/* Centered text container */
+.center-text {
+    text-align: center;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
