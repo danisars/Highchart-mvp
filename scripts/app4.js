@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Highcharts.chart("container2", {
       chart: {
         inverted: true,
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
       },
       title: {
         text: "IV Hist Vol Diff Histogram",
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     yAxis: [
       {
         title: {
-          text: "Implied Volatility",
+          text: "volatility(%)",
         },
         opposite: false,
         lineWidth: 1,
@@ -211,15 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: {
-          text: "Realised Volatility",
-        },
-        opposite: true,
-        offset: 0,
-        lineWidth: 1,
-      },
-      {
-        title: {
-          text: "IV-HV Difference",
+          text: "Volatility Spread(%)",
         },
         plotLines: [
           {
@@ -228,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
             width: 2,
             zIndex: 4,
             label: {
-              text: `Average IV-HV Difference: ${avgIvHistVolDiff.toFixed(2)}`,
+              text: `Average Volatility Spread(%): ${avgIvHistVolDiff.toFixed(2)}`,
               align: "right",
               style: {
                 color: "red",
@@ -238,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         ],
         opposite: true,
-        offset: 60,
+        offset: 0,
         lineWidth: 1,
       },
     ],
@@ -275,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
           valueDecimals: 2,
         },
         xAxis: 0,
-        yAxis: 1,
+        yAxis: 0,
         zIndex: 2,
         id: "hist_volatility_series",
         boostThreshold: 1000,
@@ -292,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ]),
         type: "column",
         xAxis: 0,
-        yAxis: 2,
+        yAxis: 1,
         zIndex: -1,
         id: "histogram",
         boostThreshold: 1000,
@@ -307,7 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 chart.xAxis[0].min,
                 chart.xAxis[0].max
               );
-              console.log(event.target.y);
               createHistogramChart(filteredData, event.target.y);
             },
           },
