@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createHistogramChart(filteredData, hoverPlotData) {
+    console.log(filteredData.iv_hist_vol_diff,iv_hist_vol_diff);
     Highcharts.chart("container2", {
       chart: {
         inverted: true,

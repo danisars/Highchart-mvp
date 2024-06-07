@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>Document</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,184 +14,185 @@
     <script src="https://code.highcharts.com/stock/indicators/ema.js"></script>
     <script src="https://code.highcharts.com/stock/indicators/macd.js"></script>
     <link rel="stylesheet" href="./assets/main.css" />
-  </head>
-  <body>
+</head>
+<body>
     <div id="container" style="height: 600px; min-width: 310px"></div>
     <script type="module">
-      import data2 from "./scripts/data2.js";
+        import data2 from "./scripts/data2.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const { close, bar_chart } = data2;
+        document.addEventListener("DOMContentLoaded", () => {
+            const { close, bar_chart } = data2;
 
-        Highcharts.stockChart("container", {
-          rangeSelector: {
-            selected: 2,
-            inputEnabled: true,
-            buttons: [
-              {
-                type: "month",
-                count: 1,
-                text: "1m",
-              },
-              {
-                type: "month",
-                count: 3,
-                text: "3m",
-              },
-              {
-                type: "month",
-                count: 6,
-                text: "6m",
-              },
-              {
-                type: "ytd",
-                text: "YTD",
-              },
-            ],
-          },
-
-          title: {
-            text: "Test chart",
-          },
-
-          subtitle: {
-            text: "With SMA and Volume by Price technical indicators",
-          },
-
-          xAxis: [
-            {
-              opposite:false
-            },
-            {
-              // secondary X axis (top)
-              opposite: true,
-              linkedTo: 0,
-            },
-          ],
-
-          yAxis: [
-            {
-              startOnTick: false,
-              endOnTick: false,
-              labels: {
-                align: "right",
-                x: -3,
-              },
-              title: {
-                text: "test",
-              },
-              lineWidth: 2,
-              resize: {
-                enabled: true,
-              },
-            },
-            {
-              labels: {
-                align: "right",
-                x: -3,
-              },
-              title: {
-                text: "Volume",
-              },
-              top: "65%",
-              height: "35%",
-              offset: 0,
-              lineWidth: 2,
-              visible: false,
-            },
-          ],
-
-          tooltip: {
-            split: true,
-          },
-
-          plotOptions: {
-            series: {
-              dataGrouping: {
-                units: [
-                  [
-                    "week", // unit name
-                    [1], // allowed multiples
-                  ],
-                  ["month", [1, 2, 3, 4, 6]],
-                ],
-              },
-            },
-          },
-
-          series: [
-            {
-              type: "candlestick",
-              name: "candlestick",
-              id: "candlestick",
-              zIndex: 2,
-              data: close.x.map((date, index) => {
-                const closeValue = close.y[index];
-                const openValue = closeValue + (Math.random() * 50 - 25);
-                const highValue =
-                  Math.max(openValue, closeValue) + Math.random() * 25;
-                const lowValue =
-                  Math.min(openValue, closeValue) - Math.random() * 25;
-                return [
-                  new Date(date).getTime(),
-                  openValue,
-                  highValue,
-                  lowValue,
-                  closeValue,
-                ];
-              }),
-            },
-            {
-              type: "column",
-              name: "Volume",
-              id: "volume",
-              data: bar_chart.map((date, index) => {
-                return {
-                  x: new Date(date).getTime(),
-                  y: 1233212,
-                };
-              }),
-              yAxis: 1,
-              visible: false,
-            },
-            {
-              type: "vbp",
-              linkedTo: "candlestick",
-              params: {
-                volumeSeriesID: "volume",
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              zoneLines: {
-                enabled: false,
-              },
-            },
-            {
-              type: "sma",
-              linkedTo: "candlestick",
-              zIndex: 1,
-              marker: {
-                enabled: false,
-              },
-            },
-            {
-              type: "pivotpoints",
-              linkedTo: "candlestick",
-              zIndex: 0,
-              lineWidth: 1,
-              dataLabels: {
-                overflow: "none",
-                crop: false,
-                y: 4,
-                style: {
-                  fontSize: 9,
+            Highcharts.stockChart("container", {
+                rangeSelector: {
+                    selected: 2,
+                    inputEnabled: true,
+                    buttons: [
+                        {
+                            type: "month",
+                            count: 1,
+                            text: "1m",
+                        },
+                        {
+                            type: "month",
+                            count: 3,
+                            text: "3m",
+                        },
+                        {
+                            type: "month",
+                            count: 6,
+                            text: "6m",
+                        },
+                        {
+                            type: "ytd",
+                            text: "YTD",
+                        },
+                    ],
                 },
-              },
-            },
-          ],
+
+                title: {
+                    text: "Test chart",
+                },
+
+                subtitle: {
+                    text: "With SMA and Volume by Price technical indicators",
+                },
+
+                xAxis: [
+                    {
+                        type: "datetime",
+                        opposite: false,
+                    },
+                    {
+                        type: "datetime",
+                        opposite: true,
+                        linkedTo: 0,
+                    },
+                ],
+
+                yAxis: [
+                    {
+                        startOnTick: false,
+                        endOnTick: false,
+                        labels: {
+                            align: "right",
+                            x: -3,
+                        },
+                        title: {
+                            text: "Price",
+                        },
+                        lineWidth: 2,
+                        resize: {
+                            enabled: true,
+                        },
+                    },
+                    {
+                        labels: {
+                            align: "right",
+                            x: -3,
+                        },
+                        title: {
+                            text: "Volume",
+                        },
+                        top: "65%",
+                        height: "35%",
+                        offset: 0,
+                        lineWidth: 2,
+                        visible: false,
+                    },
+                ],
+
+                tooltip: {
+                    shared: true,
+                },
+
+                plotOptions: {
+                    series: {
+                        dataGrouping: {
+                            units: [
+                                [
+                                    "week", // unit name
+                                    [1], // allowed multiples
+                                ],
+                                ["month", [1, 2, 3, 4, 6]],
+                            ],
+                        },
+                    },
+                },
+
+                series: [
+                    {
+                        type: "candlestick",
+                        name: "Candlestick",
+                        id: "candlestick",
+                        zIndex: 2,
+                        data: close.x.map((date, index) => {
+                            const closeValue = close.y[index];
+                            const openValue = closeValue + (Math.random() * 50 - 25);
+                            const highValue =
+                                Math.max(openValue, closeValue) + Math.random() * 25;
+                            const lowValue =
+                                Math.min(openValue, closeValue) - Math.random() * 25;
+                            return [
+                                new Date(date).getTime(),
+                                openValue,
+                                highValue,
+                                lowValue,
+                                closeValue,
+                            ];
+                        }),
+                    },
+                    {
+                        type: "column",
+                        name: "Volume",
+                        id: "volume",
+                        data: bar_chart.map((entry) => {
+                            return {
+                                x: new Date(entry.start).getTime(),
+                                y: entry.value.reduce((a, b) => a + b, 0)
+                            };
+                        }),
+                        yAxis: 1,
+                        visible: false,
+                    },
+                    {
+                        type: "vbp",
+                        linkedTo: "candlestick",
+                        params: {
+                            volumeSeriesID: "volume",
+                        },
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        zoneLines: {
+                            enabled: false,
+                        },
+                    },
+                    {
+                        type: "sma",
+                        linkedTo: "candlestick",
+                        zIndex: 1,
+                        marker: {
+                            enabled: false,
+                        },
+                    },
+                    {
+                        type: "pivotpoints",
+                        linkedTo: "candlestick",
+                        zIndex: 0,
+                        lineWidth: 1,
+                        dataLabels: {
+                            overflow: "none",
+                            crop: false,
+                            y: 4,
+                            style: {
+                                fontSize: 9,
+                            },
+                        },
+                    },
+                ],
+            });
         });
-      });
     </script>
-  </body>
+</body>
 </html>
