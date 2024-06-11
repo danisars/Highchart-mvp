@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
         turboThreshold: 0,
       },
       {
-        name: "IV-HV Difference",
+        name: "Implied Vol - Realised Vol",
         data: iv_hist_vol_diff.x.map((date, index) => [
           new Date(date).getTime(),
           iv_hist_vol_diff.y[index],
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         yAxis: 1,
         zIndex: -1,
         id: "histogram",
-        boostThreshold: 1000,
+        boostThreshold: 20000,
         dataGrouping: {
           enabled: false,
         },
