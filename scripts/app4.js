@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createHistogramChart(filteredData, hoverPlotData) {
-    console.log(filteredData.iv_hist_vol_diff,iv_hist_vol_diff);
     Highcharts.chart("container2", {
       chart: {
         inverted: true,
@@ -181,8 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     xAxis: {
       type: "datetime",
-      tickInterval: 24 * 3600 * 1000,
-      crosshair: true,
+
       labels: {
         formatter: function () {
           return Highcharts.dateFormat(
@@ -253,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: "iv_series",
         boostThreshold: 1000,
         dataGrouping: {
-          enabled: true,
+          enabled: false,
         },
         turboThreshold: 0,
       },
@@ -273,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: "hist_volatility_series",
         boostThreshold: 1000,
         dataGrouping: {
-          enabled: true,
+          enabled: false,
         },
         turboThreshold: 0,
       },
@@ -290,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: "histogram",
         boostThreshold: 1000,
         dataGrouping: {
-          enabled: true,
+          enabled: false,
         },
         turboThreshold: 0,
         point: {
