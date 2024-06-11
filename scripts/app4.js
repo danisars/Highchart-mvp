@@ -286,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
         yAxis: 1,
         zIndex: -1,
         id: "histogram",
-        boostThreshold: 20000,
         dataGrouping: {
           enabled: false,
         },
