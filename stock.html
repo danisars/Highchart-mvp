@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Chart</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script type="module" src="./scripts/stock.js"></script>
+    <style>
+       #chartsContainer {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 10px;
+        }
+        .chart {
+            flex: 0 0 auto;
+            width: 33%;
+            height: 100%;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chartsContainer"></div>
+</body>
+</html>
